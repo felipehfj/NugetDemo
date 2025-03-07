@@ -57,14 +57,24 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-
-      - name: Generate NuGet package
-        run: |
-          dotnet pack NugetDemo.csproj \
-          --configuration Release \
-          -p:PackageVersion=${{ needs.build.outputs.Version }} \
-          -p:RepositoryUrl=https://github.com/felipehfj/NugetDemo \
-          -o packages
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Pack NuGet package
+        run: dotnet pack NugetDemo.csproj -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release -o packages
+      - name: Upload NuGet package to GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: bin/Release/ 
+      #- name: Generate NuGet package
+      #  run: |
+      #    dotnet pack NugetDemo.csproj \
+      #    --configuration Release \
+      #    -p:PackageVersion=${{ needs.build.outputs.Version }} \
+      #    -p:RepositoryUrl=https://github.com/felipehfj/NugetDemo \
+      #    -o packages
 
       - name: Publish NuGet package
         run: dotnet nuget push packages/*.nupkg --api-key ${{ secrets.NUGET_PACKAGE_TOKEN }} --source https://nuget.pkg.github.com/felipehfj/index.json
