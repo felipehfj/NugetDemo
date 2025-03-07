@@ -62,14 +62,14 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
       - name: Pack NuGet package
-        run: dotnet pack NugetDemo.csproj -p:Version='${{ needs.build.outputs.Version }}' -c Release -o nugetPackage -p:RepositoryUrl=https://github.com/felipehfj/NugetDemo
+        run: dotnet pack NugetDemo.csproj -p:Version='${{ needs.build.outputs.Version }}' -c Release -o nugetPackages -p:RepositoryUrl=https://github.com/felipehfj/NugetDemo
       - name: Upload NuGet package to GitHub
         uses: actions/upload-artifact@v4
         with:
-          name: nugetPackage
+          name: nugetPackages
           path: bin/Release/      
       - name: Publish NuGet package
-        run: dotnet nuget push nugetPackage/*.nupkg --api-key ${{ secrets.NUGET_PACKAGE_TOKEN }} --source https://nuget.pkg.github.com/felipehfj/index.json
+        run: dotnet nuget push nugetPackages/*.nupkg --api-key ${{ secrets.NUGET_PACKAGE_TOKEN }} --source https://nuget.pkg.github.com/felipehfj/index.json
 #    #Push NuGet package to GitHub packages
 #    - name: Download nuget package artifact
 #      uses: actions/download-artifact@v4
