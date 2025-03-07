@@ -12,7 +12,7 @@ jobs:
       CommitsSinceVersionSource: ${{ steps.gitversion.outputs.CommitsSinceVersionSource }} 
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0 #fetch-depth is needed for GitVersion
         
@@ -31,10 +31,14 @@ jobs:
     
     #Build/pack the project
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
-    - name: Build and Pack NuGet package
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Pack NuGet package
       run: dotnet pack NugetDemo.csproj -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release
     - name: Upload NuGet package to GitHub
       uses: actions/upload-artifact@v4
@@ -50,7 +54,7 @@ jobs:
     steps:  
     #Push NuGet package to GitHub packages
     - name: Download nuget package artifact
-      uses: actions/download-artifact@v1.0.0
+      uses: actions/download-artifact@v4
       with:
         name: nugetPackage
     - name: Prep packages
@@ -62,7 +66,7 @@ jobs:
     #Create release
     - name: Create Release
       if: 1 == 0 #needs.build.outputs.CommitsSinceVersionSource > 0 #Only release if there has been a commit/version change
-      uses: actions/create-release@v1
+      uses: actions/create-release@v4
       env:
         GITHUB_TOKEN: ${{ secrets.NUGET_PACKAGE_TOKEN }} 
       with:
