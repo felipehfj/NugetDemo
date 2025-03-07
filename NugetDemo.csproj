@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <OutputPath>bin\Release\net9.0\</OutputPath>
     <RepositoryUrl>https://github.com/felipehfj/NugetDemo</RepositoryUrl>
   </PropertyGroup>
 
