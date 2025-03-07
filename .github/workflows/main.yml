@@ -62,7 +62,7 @@ jobs:
         run: |
           dotnet pack NugetDemo.csproj \
           --configuration Release \
-          -p:PackageVersion=${{ needs.generate-version.outputs.new_version }} \
+          -p:PackageVersion=${{ needs.build.outputs.Version }} \
           -p:RepositoryUrl=https://github.com/felipehfj/NugetDemo \
           -o packages
 
