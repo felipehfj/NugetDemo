@@ -35,9 +35,9 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Build and Pack NuGet package
-      run: dotnet pack NugetDemo/NugetDemo.csproj -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release
+      run: dotnet pack NugetDemo.csproj -p:Version='${{ steps.gitversion.outputs.SemVer }}' -c Release
     - name: Upload NuGet package to GitHub
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: nugetPackage
         path: bin/Release/ 
